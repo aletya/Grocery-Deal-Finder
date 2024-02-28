@@ -11,50 +11,60 @@ from selenium.webdriver.common.keys import Keys
 
 
 
-options = Options()
-options.add_experimental_option("detatch", True)
-
+# Initializes a selenium webdriver for Chrome
 driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
 
+# Opens the County Market website and maximizes the window
 driver.get("https://www2.mycountymarket.com/circulars/select_a_store/")
 driver.maximize_window()
 
+# Searches for all elements with a link
 links = driver.find_elements("xpath","//a[@href]")
 
-#note: I'm hard coding for a certain location right now, but I'll add functionality to choose stores later
+# NOTE: I'm hard coding for a certain location right now, but I'll add functionality to choose stores later
 my_link = ""
-
 for link in links:
     if "331 Stoughton Street" in link.text:
         my_link = link
 print(my_link.get_attribute("href"))
+
+# Follows link
 my_link.click()
 
+# Waits for new page to load
 wait = WebDriverWait(driver, 10)
 wait.until(EC.visibility_of_element_located((By.TAG_NAME, "body")))
 
-current_url = driver.current_url
-new_url = current_url + '//?format=online'
-
+# Modify the current URL to switch to the newsprint form of the website
+current_url = driver.current_url #"https://www2.mycountymarket.com/circulars/Page/1/Base/1/240220_NCM//?store=2641"
+split_url = current_url.split('?')
+new_url = split_url[0] + '?format=online'
 driver.get(new_url)
+#https://www2.mycountymarket.com/circulars/Page/1/Base/1/240220_NCM//?store=2641
+#https://www2.mycountymarket.com/circulars/Page/1/Base/1/240220_NCM//?format=newsprint
 
-wait = WebDriverWait(driver, 10)
+# Wait for the modified URL page to load
 wait.until(EC.visibility_of_element_located((By.TAG_NAME, "body")))
 
-details = driver.find_elements("xpath","//*[contains(text(), 'Details')]")
+# Find the <div> element with the specified class
+div_elements = driver.find_elements(By.CSS_SELECTOR, "div.circular-item-body.card-body")
 
-#note: we only need to click one deal to load the details for all deals into the webpage
-for detail in details:
-    print(detail)
-    detail.click()
-    break
+if div_elements:
+    for div_element in div_elements:
+        # If the element is found, find its child elements
+        h3_element = div_element.find_element(By.CLASS_NAME, "circular-item-title")
+        description_element = div_element.find_element(By.CLASS_NAME, "circular-item-description")
+        price_element = ""
+        try:
+            price_element = div_element.find_element(By.CLASS_NAME, "price-big-dollars")
+        except:
+            price_element = div_element.find_element(By.CLASS_NAME, "price-big-cents")
+        # Print the text contents of the child elements
+        print("Title:", h3_element.text)
+        print("Description:", description_element.text)
+        print("Price:", price_element.text)
+else:
+    print("Element(s) not found.")
 
-deals = driver.find_elements("xpath", "//div[@class='circular-item-body  modal-body']")
-
-for deal in deals:
-    print(deal)
-
-while True:
+while(True):
     pass
-
-#site content -> circulars -> circular -> search-hidden -> circular-content ->
