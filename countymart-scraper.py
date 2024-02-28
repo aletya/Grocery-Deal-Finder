@@ -49,6 +49,10 @@ wait.until(EC.visibility_of_element_located((By.TAG_NAME, "body")))
 # Find the <div> element with the specified class
 div_elements = driver.find_elements(By.CSS_SELECTOR, "div.circular-item-body.card-body")
 
+
+title = []
+description = []
+price = []
 if div_elements:
     for div_element in div_elements:
         # If the element is found, find its child elements
@@ -60,11 +64,16 @@ if div_elements:
         except:
             price_element = div_element.find_element(By.CLASS_NAME, "price-big-cents")
         # Print the text contents of the child elements
-        print("Title:", h3_element.text)
-        print("Description:", description_element.text)
-        print("Price:", price_element.text)
-else:
-    print("Element(s) not found.")
+        #formatting the information into arrays
+        title.append(h3_element.text)
+        description.append(description_element.text)
+        price.append(price_element.text)
+
+for i in range(0, len(title)):
+    print("Title: " + title[i])
+    print("Description: " + description[i])
+    print("Price: " + price[i])
+
 
 while(True):
     pass
