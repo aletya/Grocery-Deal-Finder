@@ -3,6 +3,7 @@
 import Head from 'next/head'
 import {
   Box,
+  Flex,
   Heading,
   Container,
   Text,
@@ -16,6 +17,11 @@ import {
   InputLeftElement,
   Image,
   Center,
+  Select,
+  RangeSlider,
+  RangeSliderFilledTrack,
+  RangeSliderThumb,
+  RangeSliderTrack,
 } from '@chakra-ui/react'
 
 import { SearchIcon } from '@chakra-ui/icons'
@@ -63,6 +69,43 @@ export default function CallToActionWithAnnotation() {
                 </InputLeftElement>
                 <Input type='tel' placeholder=' ' />
             </InputGroup>
+
+            <Flex height="30vh" alignItems="center" justifyContent="center">
+              <Box width="lg" p={5} boxShadow="md" borderWidth="1px">
+                <Text fontSize="xl" mb={4} textAlign="center">
+                  Advanced Search
+                </Text>
+                <Flex direction={{ base: "column", md: "row" }} align="center" gap={6}>
+                  {/* Stores dropdown label and select */}
+                  <Box w={{ base: "100%", md: "50%" }}>
+                    <Text mb={2}>Stores</Text>
+                    <Select placeholder='Select option'>
+                      <option value='option1'>County Market</option>
+                      <option value='option2'>Aldi</option>
+                      <option value='option3'>Meijer</option>
+                    </Select>
+                  </Box>
+                  
+                  {/* Price slider label and component */}
+                  <Box w={{ base: "100%", md: "50%" }}>
+                    <Text mb={2}>Price</Text>
+                    <RangeSlider defaultValue={[120, 240]} min={0} max={300} step={30}>
+                      <RangeSliderTrack bg='red.100'>
+                        <RangeSliderFilledTrack bg='tomato' />
+                      </RangeSliderTrack>
+                      <RangeSliderThumb boxSize={6} index={0} />
+                      <RangeSliderThumb boxSize={6} index={1} />
+                    </RangeSlider>
+
+                    <Flex justifyContent="space-between" mt={2}>
+                      <Text>$0</Text>
+                      <Text>$100</Text>
+                    </Flex>
+                    
+                  </Box>
+                </Flex>
+              </Box>
+            </Flex>
 
             <Button
               colorScheme={'green'}
