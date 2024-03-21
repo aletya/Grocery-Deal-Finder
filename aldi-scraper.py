@@ -12,11 +12,15 @@ import pandas as pd
 driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
 
 driver.get("https://www.aldi.us/weekly-specials/our-weekly-ads/")
-driver.maximize_window()
+#driver.maximize_window()
 driver.implicitly_wait(10)
-zipcode = 61801
 
-#ezip = driver.find
+#currentWindow = driver.windowHandle()
+
+zipcode = input("Please enter your zip code: ")
+#driver.switchTo().window(currentWindow)
+
+
 driver.switch_to.frame(0)
 enter_zip = driver.find_element(By.XPATH, '//*[@id="locationInput"]')
 enter_zip.send_keys(zipcode)
@@ -32,6 +36,12 @@ area_elements = map.find_elements(By.TAG_NAME, "area")
 item_names = []
 item_prices = []
 # item_sizes = []
+# for future reference
+
+# see details button XPath: /html/body/div/div/div[5]/div/div[1]/div[2]/div/div[2]/div[2]/div/div/div[3]/button[2]
+# see_details = driver.find_element(By.XPATH, "/html/body/div/div/div[5]/div/div[1]/div[2]/div/div[2]/div[2]/div/div/div[3]/button[2]")
+# print(see_details.text)
+
 
 count = 0
 for area in area_elements:
