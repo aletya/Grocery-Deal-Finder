@@ -97,12 +97,6 @@ for product in alcohol_products:
     price = product.find_element(By.CLASS_NAME, "sc-169d9gp-0-styled__Deal-kAKkkm").text
     validity_dates = product.find_element(By.CLASS_NAME, "ListingMini__Dates-sc-18yoxcs-14").text
     
-    # title_element = product.find_element(By.CLASS_NAME, "ListingMini__Title-sc-18yoxcs-9")
-    # title_spans = title_element.find_elements(By.TAG_NAME, "span")
-    # title = title_spans[0].text + " " + title_spans[1].text if len(title_spans) > 1 else title_spans[0].text
-    # price = product.find_element(By.CLASS_NAME, "sc-169d9gp-0-styled__Deal-kAKkkm").text
-    # validity_dates = product.find_element(By.CLASS_NAME, "ListingMini__Dates-sc-18yoxcs-14").text
-    
     if (title != ""):
         print(f"Title: {title}")
         print(f"Price: {price}")
@@ -124,12 +118,6 @@ for product in chilled_products:
     title = product.find_element(By.CLASS_NAME, "ListingMini__Title-sc-18yoxcs-9").text
     price = product.find_element(By.CLASS_NAME, "sc-169d9gp-0-styled__Deal-kAKkkm").text
     validity_dates = product.find_element(By.CLASS_NAME, "ListingMini__Dates-sc-18yoxcs-14").text
-    
-    # title_element = product.find_element(By.CLASS_NAME, "ListingMini__Title-sc-18yoxcs-9")
-    # title_spans = title_element.find_elements(By.TAG_NAME, "span")
-    # title = title_spans[0].text + " " + title_spans[1].text if len(title_spans) > 1 else title_spans[0].text
-    # price = product.find_element(By.CLASS_NAME, "sc-169d9gp-0-styled__Deal-kAKkkm").text
-    # validity_dates = product.find_element(By.CLASS_NAME, "ListingMini__Dates-sc-18yoxcs-14").text
     
     if (title != ""):
         print(f"Title: {title}")
@@ -153,11 +141,6 @@ for product in meat_products:
     price = product.find_element(By.CLASS_NAME, "sc-169d9gp-0-styled__Deal-kAKkkm").text
     validity_dates = product.find_element(By.CLASS_NAME, "ListingMini__Dates-sc-18yoxcs-14").text
     
-    # title_element = product.find_element(By.CLASS_NAME, "ListingMini__Title-sc-18yoxcs-9")
-    # title_spans = title_element.find_elements(By.TAG_NAME, "span")
-    # title = title_spans[0].text + " " + title_spans[1].text if len(title_spans) > 1 else title_spans[0].text
-    # price = product.find_element(By.CLASS_NAME, "sc-169d9gp-0-styled__Deal-kAKkkm").text
-    # validity_dates = product.find_element(By.CLASS_NAME, "ListingMini__Dates-sc-18yoxcs-14").text
     
     if (title != ""):
         print(f"Title: {title}")
@@ -180,11 +163,6 @@ for product in produce_products:
     price = product.find_element(By.CLASS_NAME, "sc-169d9gp-0-styled__Deal-kAKkkm").text
     validity_dates = product.find_element(By.CLASS_NAME, "ListingMini__Dates-sc-18yoxcs-14").text
     
-    # title_element = product.find_element(By.CLASS_NAME, "ListingMini__Title-sc-18yoxcs-9")
-    # title_spans = title_element.find_elements(By.TAG_NAME, "span")
-    # title = title_spans[0].text + " " + title_spans[1].text if len(title_spans) > 1 else title_spans[0].text
-    # price = product.find_element(By.CLASS_NAME, "sc-169d9gp-0-styled__Deal-kAKkkm").text
-    # validity_dates = product.find_element(By.CLASS_NAME, "ListingMini__Dates-sc-18yoxcs-14").text
     
     if (title != ""):
         print(f"Title: {title}")
@@ -207,12 +185,6 @@ for product in nonfood_products:
     price = product.find_element(By.CLASS_NAME, "sc-169d9gp-0-styled__Deal-kAKkkm").text
     validity_dates = product.find_element(By.CLASS_NAME, "ListingMini__Dates-sc-18yoxcs-14").text
     
-    # title_element = product.find_element(By.CLASS_NAME, "ListingMini__Title-sc-18yoxcs-9")
-    # title_spans = title_element.find_elements(By.TAG_NAME, "span")
-    # title = title_spans[0].text + " " + title_spans[1].text if len(title_spans) > 1 else title_spans[0].text
-    # price = product.find_element(By.CLASS_NAME, "sc-169d9gp-0-styled__Deal-kAKkkm").text
-    # validity_dates = product.find_element(By.CLASS_NAME, "ListingMini__Dates-sc-18yoxcs-14").text
-    
     if (title != ""):
         print(f"Title: {title}")
         print(f"Price: {price}")
@@ -233,12 +205,6 @@ for product in dry_products:
     title = product.find_element(By.CLASS_NAME, "ListingMini__Title-sc-18yoxcs-9").text
     price = product.find_element(By.CLASS_NAME, "sc-169d9gp-0-styled__Deal-kAKkkm").text
     validity_dates = product.find_element(By.CLASS_NAME, "ListingMini__Dates-sc-18yoxcs-14").text
-    
-    # title_element = product.find_element(By.CLASS_NAME, "ListingMini__Title-sc-18yoxcs-9")
-    # title_spans = title_element.find_elements(By.TAG_NAME, "span")
-    # title = title_spans[0].text + " " + title_spans[1].text if len(title_spans) > 1 else title_spans[0].text
-    # price = product.find_element(By.CLASS_NAME, "sc-169d9gp-0-styled__Deal-kAKkkm").text
-    # validity_dates = product.find_element(By.CLASS_NAME, "ListingMini__Dates-sc-18yoxcs-14").text
     
     if (title != ""):
         print(f"Title: {title}")
@@ -261,12 +227,6 @@ for product in frozen_products:
     title = product.find_element(By.CLASS_NAME, "ListingMini__Title-sc-18yoxcs-9").text
     price = product.find_element(By.CLASS_NAME, "sc-169d9gp-0-styled__Deal-kAKkkm").text
     validity_dates = product.find_element(By.CLASS_NAME, "ListingMini__Dates-sc-18yoxcs-14").text
-    
-    # title_element = product.find_element(By.CLASS_NAME, "ListingMini__Title-sc-18yoxcs-9")
-    # title_spans = title_element.find_elements(By.TAG_NAME, "span")
-    # title = title_spans[0].text + " " + title_spans[1].text if len(title_spans) > 1 else title_spans[0].text
-    # price = product.find_element(By.CLASS_NAME, "sc-169d9gp-0-styled__Deal-kAKkkm").text
-    # validity_dates = product.find_element(By.CLASS_NAME, "ListingMini__Dates-sc-18yoxcs-14").text
     
     if (title != ""):
         print(f"Title: {title}")
