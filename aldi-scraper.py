@@ -11,15 +11,21 @@ import pandas as pd
 
 driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
 
+
+#original_window = driver.current_window_handle
+
 driver.get("https://www.aldi.us/weekly-specials/our-weekly-ads/")
+#new_window = driver.current_window_handle
+#driver.set_window_position(-2000,-2000)
 #driver.maximize_window()
 driver.implicitly_wait(10)
-
+#driver.switch_to.window(original_window)
 #currentWindow = driver.windowHandle()
 
-zipcode = input("Please enter your zip code: ")
+zipcode = 61801 #input("Please enter your zip code: ")
 #driver.switchTo().window(currentWindow)
 
+#driver.switch_to.window(new_window)
 
 driver.switch_to.frame(0)
 enter_zip = driver.find_element(By.XPATH, '//*[@id="locationInput"]')
@@ -42,7 +48,7 @@ item_prices = []
 # see_details = driver.find_element(By.XPATH, "/html/body/div/div/div[5]/div/div[1]/div[2]/div/div[2]/div[2]/div/div/div[3]/button[2]")
 # print(see_details.text)
 
-
+dict = {}
 count = 0
 for area in area_elements:
     if (count%4 == 0):
@@ -58,10 +64,22 @@ for area in area_elements:
 
             print("Details:", details)
             print("Price:", price)
-            item_names.append(details)
-            item_prices.append(price)
+            # item_names.append(details)
+            # item_prices.append(price)
+            dict[details] = price
             print("\n")
         #print(sentence)
     count += 1
+    
+sorted_dict = (sorted(dict.items(), key=lambda item: item[1]))
+print(sorted_dict)
 
+
+
+categories_button = driver.find_element(By.XPATH, "/html/body/div/div/div[2]/div[1]/div[2]/div/a[2]")
+
+categories_button.click()
+
+ss = input("")
+driver.implicitly_wait(100000)
 driver.close()
