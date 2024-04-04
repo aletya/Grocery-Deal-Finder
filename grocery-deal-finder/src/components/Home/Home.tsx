@@ -26,7 +26,12 @@ import {
 
 import { SearchIcon } from '@chakra-ui/icons'
 
+import { useNavigate } from 'react-router-dom'
+
+import { Link } from 'react-router-dom';
+
 export default function CallToActionWithAnnotation() {
+
   return (
     <>
       <Container maxW={'3xl'}>
@@ -107,16 +112,18 @@ export default function CallToActionWithAnnotation() {
               </Box>
             </Flex>
 
-            <Button
-              colorScheme={'green'}
-              bg={'green.400'}
-              rounded={'full'}
-              px={6}
-              _hover={{
-                bg: 'green.500',
-              }}>
-              Get me the best deal!
-            </Button>
+            <Link to="/result">
+              <Button
+                colorScheme={'green'}
+                bg={'green.400'}
+                rounded={'full'}
+                px={6}
+                _hover={{
+                  bg: 'green.500',
+                }}>
+                Get me the best deal!
+              </Button>
+            </Link>
            
             <Box>
               <Icon
