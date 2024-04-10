@@ -1,18 +1,14 @@
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
-from selenium.webdriver.chrome.options import Options
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
-from bs4 import BeautifulSoup
-from selenium.webdriver.common.keys import Keys
 import time
 from geopy.geocoders import GoogleV3
 from geopy.distance import geodesic
 from dotenv import load_dotenv
 import os
-import json
 
 #getting API key from env file
 load_dotenv()
@@ -117,15 +113,17 @@ def get_deals(user_zip_code):
         #https://www2.mycountymarket.com/circulars/Page/1/Wrap/1/240326w_NCM/
         # vs https://www2.mycountymarket.com/circulars/Page/9/Base/1/240326_NCM/
         # Sometimes theres a different url variation, so this handles for that
-        url_parts = new_url.split("/")
-        index_page = url_parts.index("Page")
-        url_parts[index_page + 1] = str(i)
-        if url_parts[index_page+2] == "Wrap":
-            url_parts[index_page+2] = "Base"
-            url_parts[index_page+4] =  url_parts[index_page+4].replace("w_", "_")
-        new_url = "/".join(url_parts)
-        driver.get(new_url)
-        wait.until(EC.visibility_of_element_located((By.TAG_NAME, "body")))
+        #url_parts = new_url.split("/")
+        # index_page = url_parts.index("Page")
+        # url_parts[index_page + 1] = str(i)
+        # if url_parts[index_page+2] == "Wrap":
+        #     print("bad" + new_url)
+        #     url_parts[index_page+2] = "Base"
+        #     url_parts[index_page+4] =  url_parts[index_page+4].replace("w_", "_")
+        # new_url = "/".join(url_parts)
+        #driver.get(new_url)
+        #print("now at: " + new_url)
+        #wait.until(EC.visibility_of_element_located((By.TAG_NAME, "body")))
         # Find the <div> element with the specified class
         div_elements = driver.find_elements(By.CSS_SELECTOR, "div.circular-item-body.card-body")
         if div_elements:
@@ -146,6 +144,10 @@ def get_deals(user_zip_code):
                 title.append(h3_element.text)
                 description.append(description_element.text)
                 price.append(price_element.text)
+        next_page_button = driver.find_element(By.CLASS_NAME, "paging-next-page")
+        next_page_button.click()
+        wait.until(EC.visibility_of_element_located((By.TAG_NAME, "body")))
+
 
     deals = []
     for i in range(0, len(title)):
@@ -160,4 +162,4 @@ def get_deals(user_zip_code):
 
 
 #user_zip_code = input("Please enter your zip code: ")
-#deals = get_deals(user_zip_code)
+#deals = get_deals(60521)
