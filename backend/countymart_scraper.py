@@ -4,6 +4,7 @@ from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
+from selenium.webdriver.chrome.options import Options
 import time
 from geopy.geocoders import GoogleV3
 from geopy.distance import geodesic
@@ -28,7 +29,13 @@ def calculate_distance(address1, address2):
 
 def get_deals(user_zip_code):
     # Initializes a selenium webdriver for Chrome
-    driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
+    chrome_options = Options()
+    chrome_options.add_argument("--disable-extensions")
+    chrome_options.add_argument("--disable-gpu")
+    chrome_options.add_argument("--no-sandbox") # linux only
+    chrome_options.add_argument("--headless=new")
+    driver = webdriver.Chrome(options=chrome_options)
+    driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chrome_options)
 
     # Opens the County Market website and maximizes the window
     driver.get("https://www2.mycountymarket.com/circulars/select_a_store/")
@@ -162,4 +169,4 @@ def get_deals(user_zip_code):
 
 
 #user_zip_code = input("Please enter your zip code: ")
-#deals = get_deals(60521)
+#deals = get_deals(60521)i
