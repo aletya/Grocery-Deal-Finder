@@ -117,6 +117,7 @@ def get_deals(user_zip_code):
     description = []
     price = []
     for i in range(1, page_count):
+        print("scraping page " + str(i))
         #https://www2.mycountymarket.com/circulars/Page/1/Wrap/1/240326w_NCM/
         # vs https://www2.mycountymarket.com/circulars/Page/9/Base/1/240326_NCM/
         # Sometimes theres a different url variation, so this handles for that
