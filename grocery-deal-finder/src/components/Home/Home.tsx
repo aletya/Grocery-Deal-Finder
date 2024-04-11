@@ -29,9 +29,12 @@ import { SearchIcon } from '@chakra-ui/icons'
 import { useNavigate } from 'react-router-dom'
 
 import { Link } from 'react-router-dom';
+import React from 'react'
 
 export default function CallToActionWithAnnotation() {
 
+  const [value, setValue] = React.useState('')
+  const handleChange = (event) => setValue(event.target.value)
   return (
     <>
       <Container maxW={'3xl'}>
@@ -67,12 +70,13 @@ export default function CallToActionWithAnnotation() {
             align={'center'}
             alignSelf={'center'}
             position={'relative'}>
-
             <InputGroup>
                 <InputLeftElement pointerEvents='none'>
                     <SearchIcon color='gray.300' />
                 </InputLeftElement>
-                <Input type='tel' placeholder=' ' />
+                <Input type='tel' placeholder=' ' 
+                value={value}
+                onChange={handleChange}/>
             </InputGroup>
 
             <Flex height="30vh" alignItems="center" justifyContent="center">
@@ -121,7 +125,7 @@ export default function CallToActionWithAnnotation() {
                 _hover={{
                   bg: 'green.500',
                 }}>
-                Get me the best deal!
+                Get me the best deal for {value}! {/* We can use {value} for sending to backend */}
               </Button>
             </Link>
            
