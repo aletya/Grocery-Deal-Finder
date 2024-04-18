@@ -42,6 +42,8 @@ export default function CallToActionWithAnnotation() {
     setSelectedOption(event.target.value);
   };
 
+
+
   return (
     <>
       <Container maxW={'3xl'}>
@@ -123,16 +125,17 @@ export default function CallToActionWithAnnotation() {
                 </Flex>
               </Box>
             </Flex>
-
-            <Link to="/result">
+            <Link to="/result/apple">
               <Button
+                // onChange={handleChange3}
                 colorScheme={'green'}
                 bg={'green.400'}
                 rounded={'full'}
                 px={6}
                 _hover={{
                   bg: 'green.500',
-                }}>
+                }}
+                >
                 Get me the best deal for {value} at {selectedOption}! 
                 {/* We can use {value} and {selectedOption} for sending to backend 
                 Also we can have a default zipcode at first 61820*/}

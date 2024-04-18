@@ -27,13 +27,33 @@ import {
 } from '@chakra-ui/react'
 
 import { SearchIcon } from '@chakra-ui/icons'
+import { useParams } from 'react-router-dom';
+
 
 export default function SearchResultsPage() {
+  const { data } = useParams(); // held in the variable {data}
+  let jsonreal = "";
+  fetch('http://13.59.59.93:5000/test')
+    .then((response) => response.json())
+    .then((json) => {
+      // traverse the json to find where 
+      for (let i = 0; i < json.length; i++) {
+        if (json[i]["title"] === data) {
+          // fill variables with information
+          // break? 
+        }
+      }
+      jsonreal = json[0]["title"]; // Update jsonreal inside the callback
+      console.log(jsonreal); // Log jsonreal after it has been updated
+    })
+    .catch(error => {
+      console.error('There was a problem fetching the JSON:', error);
+    });
 
   const searchResults = [
     {
       id: 1,
-      name: 'Product 1',
+      name: jsonreal,
       description: 'Description of Product 1.',
       image: 'product1.jpg',
       price: 10.99,
