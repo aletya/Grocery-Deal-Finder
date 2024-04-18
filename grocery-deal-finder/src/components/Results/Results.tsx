@@ -28,12 +28,14 @@ import {
 
 import { SearchIcon } from '@chakra-ui/icons'
 import { useParams } from 'react-router-dom';
+import { useEffect, useState } from 'react';
 
 
 export default function SearchResultsPage() {
   const { data } = useParams(); // held in the variable {data}
-  let searchResults: any[] = [];
+  const [searchResults, setSearchResults] = useState([]);
   let jsonreal = "hey";
+  useEffect(() => {
     fetch('http://13.59.59.93:5000/test')
       .then(response => {
         if (!response.ok) {
@@ -42,6 +44,7 @@ export default function SearchResultsPage() {
         return response.json(); // Parse the response body as JSON
       })
       .then((json) => {
+        let results = [];
         jsonreal = json;
         // console.log(json);
         for (let i = 0; i < json["deals"].length; i++) {
@@ -49,25 +52,16 @@ export default function SearchResultsPage() {
           if (json["deals"][i]["title"] === data) {
             console.log("WE GOT IT");
             jsonreal = json["deals"][i]["title"];
-            searchResults = [
-              {
-                id: 1,
-                name: jsonreal,
-                description: 'Description of Product 1.',
-                image: 'product1.jpg',
-                price: 10.99,
-                store: 'Store A',
-              },
-              {
-                id: 2,
-                name: 'Product 2',
-                description: 'Description of Product 2.',
-                image: 'product2.jpg',
-                price: 15.49,
-                store: 'Store B',
-              },
-              //can add more search results here in the future
-            ];
+
+            results.push({
+              id: i,
+              name: json["deals"][i]["title"],
+              description: 'temp description', // ["deals"][i]["description"]
+              image: 'product1.jpg', // Update with actual image URL
+              price: 5,  //Number(json["deals"][i]["price"]) json["deals"][i]["price"]
+              store: 'County Market', // Update with actual store name
+            });
+            setSearchResults(results);
             break;
           }
         }
@@ -75,6 +69,7 @@ export default function SearchResultsPage() {
       .catch(error => {
         console.error('There was a problem fetching the JSON:', error);
       });
+    }, []);
   // let jsonreal = "hey";
   // fetch('http://13.59.59.93:5000/test')
   //   .then(response => {
