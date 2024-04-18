@@ -11,9 +11,26 @@ import pandas as pd
 
 
 def get_deals(zipcode):
-    driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
+    #driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
 
-
+    title = []
+    description = []
+    price = []
+    
+    title.append("Aldi Basic Deal")
+    description.append("Aldi Basic Description")
+    price.append("Aldi Basic Price")
+    
+    deals = []
+    for i in range(0, len(title)):
+        price[i] = price[i].replace(" ","", 2)
+        price[i] = price[i].replace(" "," per ", 1)
+        deals.append({
+            'title': title[i],
+            'description': description[i],
+            'price': price[i]
+        })
+    return deals
     #original_window = driver.current_window_handle
 
     driver.get("https://www.aldi.us/weekly-specials/our-weekly-ads/")
@@ -84,7 +101,7 @@ def get_deals(zipcode):
     
     return sorted_dict
 
-d = get_deals(61801)
+print(get_deals(61801))
 
 # categories_button = driver.find_element(By.XPATH, "/html/body/div/div/div[2]/div[1]/div[2]/div/a[2]")
 
