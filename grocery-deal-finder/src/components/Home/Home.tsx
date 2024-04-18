@@ -125,7 +125,7 @@ export default function CallToActionWithAnnotation() {
                 </Flex>
               </Box>
             </Flex>
-            <Link to="/result/apple">
+            <Link to="/result/Bananas">
               <Button
                 // onChange={handleChange3}
                 colorScheme={'green'}

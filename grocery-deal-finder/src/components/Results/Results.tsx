@@ -32,46 +32,76 @@ import { useParams } from 'react-router-dom';
 
 export default function SearchResultsPage() {
   const { data } = useParams(); // held in the variable {data}
-  let jsonreal = "";
-  fetch('http://13.59.59.93:5000/test')
-    .then((response) => response.json())
-    .then((json) => {
-      // traverse the json to find where 
-      for (let i = 0; i < json.length; i++) {
-        if (json[i]["title"] === data) {
-          // fill variables with information
-          // break? 
+  let searchResults: any[] = [];
+  let jsonreal = "hey";
+    fetch('http://13.59.59.93:5000/test')
+      .then(response => {
+        if (!response.ok) {
+         throw new Error('Network response was not ok');
         }
-      }
-      jsonreal = json[0]["title"]; // Update jsonreal inside the callback
-      console.log(jsonreal); // Log jsonreal after it has been updated
-    })
-    .catch(error => {
-      console.error('There was a problem fetching the JSON:', error);
-    });
+        return response.json(); // Parse the response body as JSON
+      })
+      .then((json) => {
+        jsonreal = json;
+        // console.log(json);
+        for (let i = 0; i < json["deals"].length; i++) {
+          console.log(json["deals"][i]["title"]);
+          if (json["deals"][i]["title"] === data) {
+            console.log("WE GOT IT");
+            jsonreal = json["deals"][i]["title"];
+            searchResults = [
+              {
+                id: 1,
+                name: jsonreal,
+                description: 'Description of Product 1.',
+                image: 'product1.jpg',
+                price: 10.99,
+                store: 'Store A',
+              },
+              {
+                id: 2,
+                name: 'Product 2',
+                description: 'Description of Product 2.',
+                image: 'product2.jpg',
+                price: 15.49,
+                store: 'Store B',
+              },
+              //can add more search results here in the future
+            ];
+            break;
+          }
+        }
+      })
+      .catch(error => {
+        console.error('There was a problem fetching the JSON:', error);
+      });
+  // let jsonreal = "hey";
+  // fetch('http://13.59.59.93:5000/test')
+  //   .then(response => {
+  //     if (!response.ok) {
+  //       throw new Error('Network response was not ok');
+  //     }
+  //     return response.json(); // Parse the response body as JSON
+  //   })
+  //   .then((json) => {
+  //     // traverse the json to find where 
+  //     // for (let i = 0; i < json.length; i++) {
+  //     //   if (json[i]["title"] === data) {
+  //     //     // fill variables with information
+  //     //     // break? 
+  //     //   }
+  //     // }
+  //     jsonreal = json;
+  //     window.alert(jsonreal); // Update jsonreal inside the callback
+  //   })
+  //   .catch(error => {
+  //     console.error('There was a problem fetching the JSON:', error);
+  //   });
 
-  const searchResults = [
-    {
-      id: 1,
-      name: jsonreal,
-      description: 'Description of Product 1.',
-      image: 'product1.jpg',
-      price: 10.99,
-      store: 'Store A',
-    },
-    {
-      id: 2,
-      name: 'Product 2',
-      description: 'Description of Product 2.',
-      image: 'product2.jpg',
-      price: 15.49,
-      store: 'Store B',
-    },
-    //can add more search results here in the future
-  ];
 
   return (
     <>
+    <h1>{jsonreal}</h1>
       <Container maxW={'3xl'}>
         <Stack
           as={Box}
