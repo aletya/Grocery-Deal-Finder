@@ -96,36 +96,46 @@ export default function HomePage() {
                 <Text fontSize="xl" mb={4} textAlign="center">
                   Advanced Search
                 </Text>
-                <Flex direction={{ base: "column", md: "row" }} align="center" gap={6}>
-                  {/* Stores dropdown label and select */}
-                  <Box w={{ base: "100%", md: "50%" }}>
-                    <Text mb={2}>Stores</Text>
-                    <Select placeholder='Select option' onChange={handleStoreSelect} value={selectedStore}>
-                      <option value='County Market'>County Market</option>
-                      <option value='Aldi'>Aldi</option>
-                      <option value='Meijer'>Meijer</option>
+                <Box>
+                  <Flex direction={{ base: "column", md: "row" }} align="center" gap={6}>
+                    {/* Stores dropdown label and select */}
+                    <Box w={{ base: "100%", md: "33%" }}>
+                      <Text mb={2}>Stores</Text>
+                      <Select placeholder='Select option' onChange={handleStoreSelect} value={selectedStore}>
+                        <option value='County Market'>County Market</option>
+                        <option value='Aldi'>Aldi</option>
+                        <option value='Meijer'>Meijer</option>
+                      </Select>
+                    </Box>
+        
+              {/* Price slider label and component */}
+              <Box w={{ base: "100%", md: "33%" }}>
+                <Text mb={2}>Price</Text>
+                <RangeSlider defaultValue={[120, 240]} min={0} max={300} step={30}>
+                  <RangeSliderTrack bg='gray.300'>
+                    <RangeSliderFilledTrack bg='green.400' />
+                  </RangeSliderTrack>
+                  <RangeSliderThumb boxSize={6} index={0} />
+                  <RangeSliderThumb boxSize={6} index={1} />
+                </RangeSlider>
 
-                    </Select>
-                  </Box>
-                  
-                  {/* Price slider label and component */}
-                  <Box w={{ base: "100%", md: "50%" }}>
-                    <Text mb={2}>Price</Text>
-                    <RangeSlider defaultValue={[120, 240]} min={0} max={300} step={30}>
-                      <RangeSliderTrack bg='gray.300'>
-                        <RangeSliderFilledTrack bg='green.400' />
-                      </RangeSliderTrack>
-                      <RangeSliderThumb boxSize={6} index={0} />
-                      <RangeSliderThumb boxSize={6} index={1} />
-                    </RangeSlider>
+                  <Flex justifyContent="space-between" mt={2}>
+                    <Text>$0</Text>
+                    <Text>$100</Text>
+                  </Flex>
+                </Box>
 
-                    <Flex justifyContent="space-between" mt={2}>
-                      <Text>$0</Text>
-                      <Text>$100</Text>
-                    </Flex>
-                    
+                  {/* Zipcode input field */}
+                  <Box w={{ base: "100%", md: "33%" }}>
+                    <Text mb={2}>Zipcode</Text>
+                    <Input
+                      type="tel"
+                      placeholder="Zipcode"
+                      
+                    />
                   </Box>
                 </Flex>
+               </Box>
               </Box>
             </Flex>
             <Link to={urlstring}>
