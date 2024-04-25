@@ -34,7 +34,6 @@ import { useEffect, useState } from 'react';
 export default function SearchResultsPage() {
   const { data } = useParams(); // held in the variable {data}
   const [searchResults, setSearchResults] = useState([]);
-  let jsonreal = "hey";
   useEffect(() => {
     fetch('http://13.59.59.93:5000/test')
       .then(response => {
@@ -96,7 +95,6 @@ export default function SearchResultsPage() {
 
   return (
     <>
-    <h1>{jsonreal}</h1>
       <Container maxW={'3xl'}>
         <Stack
           as={Box}
