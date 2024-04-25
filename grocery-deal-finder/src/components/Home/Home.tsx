@@ -32,9 +32,13 @@ import { Link } from 'react-router-dom';
 import React, { useState } from 'react'
 
 export default function CallToActionWithAnnotation() {
-
   const [value, setValue] = React.useState('') // For {value} item
-  const handleChange = (event) => setValue(event.target.value) // For {value} item
+  const [urlstring, setUrlstring] = React.useState('/result/');
+  const handleChange = (event) => {
+    const updatedValue = event.target.value;
+    setValue(updatedValue);
+    setUrlstring('/result/' + updatedValue);
+  }
   
   const [selectedOption, setSelectedOption] = useState('');
 
@@ -125,7 +129,7 @@ export default function CallToActionWithAnnotation() {
                 </Flex>
               </Box>
             </Flex>
-            <Link to="/result/Bananas">
+            <Link to={urlstring}>
               <Button
                 // onChange={handleChange3}
                 colorScheme={'green'}
