@@ -36,7 +36,7 @@ export default function SearchResultsPage() {
   const [searchResults, setSearchResults] = useState([]);
   let jsonreal = "hey";
   useEffect(() => {
-    fetch('http://13.59.59.93:5000/test')
+    fetch('13.59.59.93:5000/county-market?zip_code=60521')
       .then(response => {
         if (!response.ok) {
          throw new Error('Network response was not ok');
