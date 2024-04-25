@@ -11,7 +11,7 @@ export default function App() {
     <Router>
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/result" element={<Results />} />
+        <Route path="/result/:data" element={<Results />} />
       </Routes>
     </Router>
   );

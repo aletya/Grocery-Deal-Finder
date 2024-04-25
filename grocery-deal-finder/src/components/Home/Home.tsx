@@ -29,8 +29,20 @@ import { SearchIcon } from '@chakra-ui/icons'
 import { useNavigate } from 'react-router-dom'
 
 import { Link } from 'react-router-dom';
+import React, { useState } from 'react'
 
 export default function CallToActionWithAnnotation() {
+
+  const [value, setValue] = React.useState('') // For {value} item
+  const handleChange = (event) => setValue(event.target.value) // For {value} item
+  
+  const [selectedOption, setSelectedOption] = useState('');
+
+  const handleChange2 = (event) => {
+    setSelectedOption(event.target.value);
+  };
+
+
 
   return (
     <>
@@ -67,12 +79,13 @@ export default function CallToActionWithAnnotation() {
             align={'center'}
             alignSelf={'center'}
             position={'relative'}>
-
             <InputGroup>
                 <InputLeftElement pointerEvents='none'>
                     <SearchIcon color='gray.300' />
                 </InputLeftElement>
-                <Input type='tel' placeholder=' ' />
+                <Input type='tel' placeholder=' ' 
+                value={value}
+                onChange={handleChange}/>
             </InputGroup>
 
             <Flex height="30vh" alignItems="center" justifyContent="center">
@@ -84,10 +97,11 @@ export default function CallToActionWithAnnotation() {
                   {/* Stores dropdown label and select */}
                   <Box w={{ base: "100%", md: "50%" }}>
                     <Text mb={2}>Stores</Text>
-                    <Select placeholder='Select option'>
-                      <option value='option1'>County Market</option>
-                      <option value='option2'>Aldi</option>
-                      <option value='option3'>Meijer</option>
+                    <Select placeholder='Select option' onChange={handleChange2} value={selectedOption}>
+                      <option value='County Market'>County Market</option>
+                      <option value='Aldi'>Aldi</option>
+                      <option value='Meijer'>Meijer</option>
+
                     </Select>
                   </Box>
                   
@@ -95,8 +109,8 @@ export default function CallToActionWithAnnotation() {
                   <Box w={{ base: "100%", md: "50%" }}>
                     <Text mb={2}>Price</Text>
                     <RangeSlider defaultValue={[120, 240]} min={0} max={300} step={30}>
-                      <RangeSliderTrack bg='red.100'>
-                        <RangeSliderFilledTrack bg='tomato' />
+                      <RangeSliderTrack bg='gray.300'>
+                        <RangeSliderFilledTrack bg='green.400' />
                       </RangeSliderTrack>
                       <RangeSliderThumb boxSize={6} index={0} />
                       <RangeSliderThumb boxSize={6} index={1} />
@@ -111,17 +125,20 @@ export default function CallToActionWithAnnotation() {
                 </Flex>
               </Box>
             </Flex>
-
-            <Link to="/result">
+            <Link to="/result/Bananas">
               <Button
+                // onChange={handleChange3}
                 colorScheme={'green'}
                 bg={'green.400'}
                 rounded={'full'}
                 px={6}
                 _hover={{
                   bg: 'green.500',
-                }}>
-                Get me the best deal!
+                }}
+                >
+                Get me the best deal for {value} at {selectedOption}! 
+                {/* We can use {value} and {selectedOption} for sending to backend 
+                Also we can have a default zipcode at first 61820*/}
               </Button>
             </Link>
            
