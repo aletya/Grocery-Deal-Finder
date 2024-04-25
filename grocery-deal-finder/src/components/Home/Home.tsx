@@ -31,7 +31,7 @@ import { useNavigate } from 'react-router-dom'
 import { Link } from 'react-router-dom';
 import React, { useState } from 'react'
 
-export default function CallToActionWithAnnotation() {
+export default function HomePage() {
 
   const [groceryItem, setGroceryItem] = React.useState('')
   const [urlstring, setUrlstring] = React.useState('/result/');
