@@ -27,15 +27,25 @@ import {
 } from '@chakra-ui/react'
 
 import { SearchIcon } from '@chakra-ui/icons'
-import { useParams } from 'react-router-dom';
-import { useEffect, useState } from 'react';
-
+import { useParams, Link } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
 
 export default function SearchResultsPage() {
   const { data } = useParams(); // held in the variable {data}
   const [searchResults, setSearchResults] = useState([]);
+  let jsonreal = "hey";
+
+  // Handles searching again for another item
+  const [groceryItem, setGroceryItem] = React.useState('')
+  const [urlstring, setUrlstring] = React.useState('/result/');
+  const handleItemSearch = (event) => {
+    const searchedItem = event.target.value;
+    setGroceryItem(searchedItem);
+    setUrlstring('/result/' + searchedItem);
+  }
+
   useEffect(() => {
-    fetch('http://13.59.59.93:5000/test')
+    fetch('13.59.59.93:5000/county-market?zip_code=60521')
       .then(response => {
         if (!response.ok) {
          throw new Error('Network response was not ok');
@@ -115,20 +125,25 @@ export default function SearchResultsPage() {
               <InputLeftElement pointerEvents="none">
                 <SearchIcon color="gray.300" />
               </InputLeftElement>
-              <Input type="text" placeholder="Search for another item!" />
+              <Input type="text" placeholder="Search for another item!" 
+                 value={groceryItem}
+                 onChange={handleItemSearch}
+              />
             </InputGroup>
-            <Button
-              colorScheme="green"
-              bg="green.400"
-              rounded="full"
-              px={6}
-              ml={2}
-              _hover={{
-                bg: 'green.500',
-              }}
-            >
-              Search
-            </Button>
+            <Link to ={urlstring}>
+              <Button
+                colorScheme="green"
+                bg="green.400"
+                rounded="full"
+                px={6}
+                ml={2}
+                _hover={{
+                  bg: 'green.500',
+                }}
+              >
+                Search
+              </Button>
+            </Link>
           </Flex>
         
           <Box mt={8} p={5} boxShadow="md" borderWidth="1px">

@@ -31,18 +31,20 @@ import { useNavigate } from 'react-router-dom'
 import { Link } from 'react-router-dom';
 import React, { useState } from 'react'
 
-export default function CallToActionWithAnnotation() {
+export default function HomePage() {
 
-  const [value, setValue] = React.useState('') // For {value} item
-  const handleChange = (event) => setValue(event.target.value) // For {value} item
+  const [groceryItem, setGroceryItem] = React.useState('')
+  const [urlstring, setUrlstring] = React.useState('/result/');
+  const handleItemSearch = (event) => {
+    const searchedItem = event.target.value;
+    setGroceryItem(searchedItem);
+    setUrlstring('/result/' + searchedItem);
+  }
   
-  const [selectedOption, setSelectedOption] = useState('');
-
-  const handleChange2 = (event) => {
-    setSelectedOption(event.target.value);
+  const [selectedStore, setSelectedStore] = useState('');
+  const handleStoreSelect = (event) => {
+    setSelectedStore(event.target.value);
   };
-
-
 
   return (
     <>
@@ -73,6 +75,7 @@ export default function CallToActionWithAnnotation() {
             />
           </Center>
 
+          // Search Bar
           <Stack
             direction={'column'}
             spacing={3}
@@ -84,8 +87,8 @@ export default function CallToActionWithAnnotation() {
                     <SearchIcon color='gray.300' />
                 </InputLeftElement>
                 <Input type='tel' placeholder=' ' 
-                value={value}
-                onChange={handleChange}/>
+                value={groceryItem}
+                onChange={handleItemSearch}/>
             </InputGroup>
 
             <Flex height="30vh" alignItems="center" justifyContent="center">
@@ -93,39 +96,49 @@ export default function CallToActionWithAnnotation() {
                 <Text fontSize="xl" mb={4} textAlign="center">
                   Advanced Search
                 </Text>
-                <Flex direction={{ base: "column", md: "row" }} align="center" gap={6}>
-                  {/* Stores dropdown label and select */}
-                  <Box w={{ base: "100%", md: "50%" }}>
-                    <Text mb={2}>Stores</Text>
-                    <Select placeholder='Select option' onChange={handleChange2} value={selectedOption}>
-                      <option value='County Market'>County Market</option>
-                      <option value='Aldi'>Aldi</option>
-                      <option value='Meijer'>Meijer</option>
+                <Box>
+                  <Flex direction={{ base: "column", md: "row" }} align="center" gap={6}>
+                    {/* Stores dropdown label and select */}
+                    <Box w={{ base: "100%", md: "33%" }}>
+                      <Text mb={2}>Stores</Text>
+                      <Select placeholder='Select option' onChange={handleStoreSelect} value={selectedStore}>
+                        <option value='County Market'>County Market</option>
+                        <option value='Aldi'>Aldi</option>
+                        <option value='Meijer'>Meijer</option>
+                      </Select>
+                    </Box>
+        
+              {/* Price slider label and component */}
+              <Box w={{ base: "100%", md: "33%" }}>
+                <Text mb={2}>Price</Text>
+                <RangeSlider defaultValue={[120, 240]} min={0} max={300} step={30}>
+                  <RangeSliderTrack bg='gray.300'>
+                    <RangeSliderFilledTrack bg='green.400' />
+                  </RangeSliderTrack>
+                  <RangeSliderThumb boxSize={6} index={0} />
+                  <RangeSliderThumb boxSize={6} index={1} />
+                </RangeSlider>
 
-                    </Select>
-                  </Box>
-                  
-                  {/* Price slider label and component */}
-                  <Box w={{ base: "100%", md: "50%" }}>
-                    <Text mb={2}>Price</Text>
-                    <RangeSlider defaultValue={[120, 240]} min={0} max={300} step={30}>
-                      <RangeSliderTrack bg='gray.300'>
-                        <RangeSliderFilledTrack bg='green.400' />
-                      </RangeSliderTrack>
-                      <RangeSliderThumb boxSize={6} index={0} />
-                      <RangeSliderThumb boxSize={6} index={1} />
-                    </RangeSlider>
+                  <Flex justifyContent="space-between" mt={2}>
+                    <Text>$0</Text>
+                    <Text>$100</Text>
+                  </Flex>
+                </Box>
 
-                    <Flex justifyContent="space-between" mt={2}>
-                      <Text>$0</Text>
-                      <Text>$100</Text>
-                    </Flex>
-                    
+                  {/* Zipcode input field */}
+                  <Box w={{ base: "100%", md: "33%" }}>
+                    <Text mb={2}>Zipcode</Text>
+                    <Input
+                      type="tel"
+                      placeholder="Zipcode"
+                      
+                    />
                   </Box>
                 </Flex>
+               </Box>
               </Box>
             </Flex>
-            <Link to="/result/Bananas">
+            <Link to={urlstring}>
               <Button
                 // onChange={handleChange3}
                 colorScheme={'green'}
@@ -136,8 +149,8 @@ export default function CallToActionWithAnnotation() {
                   bg: 'green.500',
                 }}
                 >
-                Get me the best deal for {value} at {selectedOption}! 
-                {/* We can use {value} and {selectedOption} for sending to backend 
+                Get me the best deal for {groceryItem} at {selectedStore}! 
+                {/* We can use {groceryItem} and {selectedStore} for sending to backend 
                 Also we can have a default zipcode at first 61820*/}
               </Button>
             </Link>
