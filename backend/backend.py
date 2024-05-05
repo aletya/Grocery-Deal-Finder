@@ -1,8 +1,10 @@
 from flask import Flask, request, jsonify
 from countymart_scraper import get_cached_deals
 from aldi_scraper import get_deals
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app, supports_credentials=True)
 
 @app.route('/')
 def test():

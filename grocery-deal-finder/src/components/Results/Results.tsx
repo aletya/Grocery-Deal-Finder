@@ -69,7 +69,6 @@ export default function SearchResultsPage() {
       const storeName = formatStoreName(store);
       const response = await fetch(`http://13.59.59.93:5000/${storeName}?zip_code=${zipCode}`, {
         method: 'GET',
-        credentials: 'include',
       });
       if (response.ok) {
         const results = await response.json(); 
