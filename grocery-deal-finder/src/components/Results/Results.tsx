@@ -80,7 +80,7 @@ export default function SearchResultsPage() {
               title: results["deals"][i]["title"],
               description: results["deals"][i]["description"],
               price: results["deals"][i]["price"], 
-              store: 'County Market', // Update with actual store name
+              store: store,
             });
           }
           setSearchResults(filteredResults);
