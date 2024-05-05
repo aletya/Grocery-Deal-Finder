@@ -64,7 +64,7 @@ export default function SearchResultsPage() {
     setSliderValue(value);
   };
 
-  const fetchData = async (store: string, zipCode: string): Promise<void> => {
+  const fetchData = async (store: string, zipCode: string, groceryItem: string): Promise<void> => {
     try {
       const storeName = formatStoreName(store);
       const response = await fetch(`http://13.59.59.93:5000/${storeName}?zip_code=${zipCode}`, {
@@ -72,8 +72,19 @@ export default function SearchResultsPage() {
       });
       if (response.ok) {
         const results = await response.json(); 
-        const filteredResults = results.deals.filter((deal: Deal) => deal.title.toLowerCase().includes(groceryItem.toLowerCase()));
-        setSearchResults(filteredResults); 
+        let filteredResults = []
+        for (let i = 0; i < results["deals"].length; i++) {
+          if (results["deals"][i]["title"].toLowerCase().includes(groceryItem.toLowerCase())) {
+            console.log(results["deals"][i]["title"] + " includes " + groceryItem)
+              filteredResults.push({
+              title: results["deals"][i]["title"],
+              description: results["deals"][i]["description"],
+              price: results["deals"][i]["price"], 
+              store: 'County Market', // Update with actual store name
+            });
+          }
+          setSearchResults(filteredResults);
+        }
       } else {
         throw new Error('Network response was not ok');
       }
@@ -109,8 +120,8 @@ export default function SearchResultsPage() {
     setGroceryItem(groceryItem);
     setSelectedStore(selectedStore);
     setZipCode(zipCode);
-    
-    fetchData(selectedStore, zipCode);
+
+    fetchData(selectedStore, zipCode, groceryItem);
   }, [location.state]);
 
   // Handles searching again for another item
