@@ -112,7 +112,7 @@ def get_deals(zipcode):
     
     return deals
 
-print(get_deals(61801))
+#print(get_deals(61801))
 
 # categories_button = driver.find_element(By.XPATH, "/html/body/div/div/div[2]/div[1]/div[2]/div/a[2]")
 
