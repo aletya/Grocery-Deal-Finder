@@ -1,5 +1,5 @@
 from flask import Flask, request, jsonify
-from countymart_scraper import get_deals
+from countymart_scraper import get_cached_deals
 
 app = Flask(__name__)
 
@@ -10,9 +10,10 @@ def test():
 @app.route('/county-market', methods=['GET'])
 def county_market_deals():
     user_zip_code = request.args.get('zip_code')
+    
     if user_zip_code:
         user_zip_code = int(user_zip_code)
-        return jsonify({'deals': get_deals(user_zip_code)}), 200
+        return jsonify(get_cached_deals(user_zip_code)), 200
     else:
         return jsonify({'error': 'Status code not provided'}), 400
     
@@ -24,6 +25,7 @@ def aldi_deals():
         return jsonify({'deals': get_deals(user_zip_code)}), 200
     else:
         return jsonify({'error': 'Status code not provided'}), 400
+
 
 if __name__ == '__main__':
     app.run(debug=True)

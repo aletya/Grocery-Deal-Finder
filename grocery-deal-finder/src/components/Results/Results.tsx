@@ -27,28 +27,81 @@ import {
 } from '@chakra-ui/react'
 
 import { SearchIcon } from '@chakra-ui/icons'
+import { useParams, Link } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
 
 export default function SearchResultsPage() {
+  const { data } = useParams(); // held in the variable {data}
+  const [searchResults, setSearchResults] = useState([]);
+  let jsonreal = "hey";
 
-  const searchResults = [
-    {
-      id: 1,
-      name: 'Product 1',
-      description: 'Description of Product 1.',
-      image: 'product1.jpg',
-      price: 10.99,
-      store: 'Store A',
-    },
-    {
-      id: 2,
-      name: 'Product 2',
-      description: 'Description of Product 2.',
-      image: 'product2.jpg',
-      price: 15.49,
-      store: 'Store B',
-    },
-    //can add more search results here in the future
-  ];
+  // Handles searching again for another item
+  const [groceryItem, setGroceryItem] = React.useState('')
+  const [urlstring, setUrlstring] = React.useState('/result/');
+  const handleItemSearch = (event) => {
+    const searchedItem = event.target.value;
+    setGroceryItem(searchedItem);
+    setUrlstring('/result/' + searchedItem);
+  }
+
+  useEffect(() => {
+    fetch('13.59.59.93:5000/county-market?zip_code=60521')
+      .then(response => {
+        if (!response.ok) {
+         throw new Error('Network response was not ok');
+        }
+        return response.json(); // Parse the response body as JSON
+      })
+      .then((json) => {
+        let results = [];
+        jsonreal = json;
+        // console.log(json);
+        for (let i = 0; i < json["deals"].length; i++) {
+          console.log(json["deals"][i]["title"]);
+          if (json["deals"][i]["title"] === data) {
+            console.log("WE GOT IT");
+            jsonreal = json["deals"][i]["title"];
+
+            results.push({
+              id: i,
+              name: json["deals"][i]["title"],
+              description: 'temp description', // ["deals"][i]["description"]
+              image: 'product1.jpg', // Update with actual image URL
+              price: 5,  //Number(json["deals"][i]["price"]) json["deals"][i]["price"]
+              store: 'County Market', // Update with actual store name
+            });
+            setSearchResults(results);
+            break;
+          }
+        }
+      })
+      .catch(error => {
+        console.error('There was a problem fetching the JSON:', error);
+      });
+    }, []);
+  // let jsonreal = "hey";
+  // fetch('http://13.59.59.93:5000/test')
+  //   .then(response => {
+  //     if (!response.ok) {
+  //       throw new Error('Network response was not ok');
+  //     }
+  //     return response.json(); // Parse the response body as JSON
+  //   })
+  //   .then((json) => {
+  //     // traverse the json to find where 
+  //     // for (let i = 0; i < json.length; i++) {
+  //     //   if (json[i]["title"] === data) {
+  //     //     // fill variables with information
+  //     //     // break? 
+  //     //   }
+  //     // }
+  //     jsonreal = json;
+  //     window.alert(jsonreal); // Update jsonreal inside the callback
+  //   })
+  //   .catch(error => {
+  //     console.error('There was a problem fetching the JSON:', error);
+  //   });
+
 
   return (
     <>
@@ -72,20 +125,25 @@ export default function SearchResultsPage() {
               <InputLeftElement pointerEvents="none">
                 <SearchIcon color="gray.300" />
               </InputLeftElement>
-              <Input type="text" placeholder="Search for another item!" />
+              <Input type="text" placeholder="Search for another item!" 
+                 value={groceryItem}
+                 onChange={handleItemSearch}
+              />
             </InputGroup>
-            <Button
-              colorScheme="green"
-              bg="green.400"
-              rounded="full"
-              px={6}
-              ml={2}
-              _hover={{
-                bg: 'green.500',
-              }}
-            >
-              Search
-            </Button>
+            <Link to ={urlstring}>
+              <Button
+                colorScheme="green"
+                bg="green.400"
+                rounded="full"
+                px={6}
+                ml={2}
+                _hover={{
+                  bg: 'green.500',
+                }}
+              >
+                Search
+              </Button>
+            </Link>
           </Flex>
         
           <Box mt={8} p={5} boxShadow="md" borderWidth="1px">
