@@ -11,7 +11,7 @@ import pandas as pd
 
 
 def get_deals(zipcode):
-    driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
+    #driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
 
     title = []
     description = []
@@ -21,16 +21,41 @@ def get_deals(zipcode):
     # description.append("Aldi Basic Description")
     # price.append("Aldi Basic Price")
     
+    title.append("Green Grapes")
+    description.append("Green Grapes Description")
+    price.append("1.69")
+    
+    title.append("Fresh 73 Lean Ground Beef")
+    description.append("Fresh 73 Lean Ground Beef Description")
+    price.append("3.39")
+    
+    title.append("Limes")
+    description.append("Limes Description")
+    price.append("1.99")
+    
+    title.append("Raspberries")
+    description.append("Raspberries Description")
+    price.append("1.99")
+    
+    title.append("Emporium Selection Fresh Marinated Mozzarella")
+    description.append("Emporium Selection Fresh Marinated Mozzarella Description")
+    price.append("3.49")
+    
+    title.append("PurAqua Belle Vie Sparkling Flavored Water")
+    description.append("PurAqua Belle Vie Sparkling Flavored Water Description")
+    price.append("3.79")
+    
     deals = []
-    # for i in range(0, len(title)):
-    #     price[i] = price[i].replace(" ","", 2)
-    #     price[i] = price[i].replace(" "," per ", 1)
-    #     deals.append({
-    #         'title': title[i],
-    #         'description': description[i],
-    #         'price': price[i]
-    #     })
-    # return deals
+    for i in range(0, len(title)):
+        price[i] = price[i].replace(" ","", 2)
+        price[i] = price[i].replace(" "," per ", 1)
+        deals.append({
+            'title': title[i],
+            'description': description[i],
+            'price': price[i]
+        })
+    return deals
+
     #original_window = driver.current_window_handle
 
     driver.get("https://www.aldi.us/weekly-specials/our-weekly-ads/")
@@ -112,9 +137,9 @@ def get_deals(zipcode):
     
     return deals
 
-#print(get_deals(61801))
+print(get_deals(61801))
 
-# categories_button = driver.find_element(By.XPATH, "/html/body/div/div/div[2]/div[1]/div[2]/div/a[2]")
+# categories_button = driver.find_element(By.XPATH, "/html/94body/div/div/div[2]/div[1]/div[2]/div/a[2]")
 
 # categories_button.click()
 
