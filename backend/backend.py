@@ -1,5 +1,6 @@
 from flask import Flask, request, jsonify
 from countymart_scraper import get_cached_deals
+from aldi_scraper import get_deals
 
 app = Flask(__name__)
 

@@ -1,6 +1,5 @@
 'use client'
 
-import Head from 'next/head'
 import {
   Box,
   Flex,
@@ -29,21 +28,47 @@ import { SearchIcon } from '@chakra-ui/icons'
 import { useNavigate } from 'react-router-dom'
 
 import { Link } from 'react-router-dom';
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
+
+import ResultsPage from '@/components/Results/Results';
 
 export default function HomePage() {
-
+  const navigate = useNavigate();
   const [groceryItem, setGroceryItem] = React.useState('')
+  const [selectedStore, setSelectedStore] = React.useState('');
+  const [zipCode, setZipCode] = React.useState('');
   const [urlstring, setUrlstring] = React.useState('/result/');
-  const handleItemSearch = (event) => {
+  const [sliderValue, setSliderValue] = useState([0, 100]);
+
+  const handleItemSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     const searchedItem = event.target.value;
     setGroceryItem(searchedItem);
     setUrlstring('/result/' + searchedItem);
   }
-  
-  const [selectedStore, setSelectedStore] = useState('');
-  const handleStoreSelect = (event) => {
+
+  const handleStoreSelect = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedStore(event.target.value);
+  };
+
+  const handleZipCode = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setZipCode(event.target.value);
+  }
+ 
+  const handleSearchSubmit = (event: React.MouseEvent<HTMLButtonElement>) => {
+    const initialSearchData = {
+      groceryItem: groceryItem,
+      selectedStore: selectedStore,
+      zipCode: zipCode,
+    }; 
+    console.log(groceryItem);
+    console.log(selectedStore);
+    console.log(zipCode);
+    console.log(initialSearchData);
+    navigate(`${urlstring}`, { state: { initialSearchData } });
+  }
+
+  const handleSliderChange = (value: number[]) => {
+    setSliderValue(value);
   };
 
   return (
@@ -101,29 +126,40 @@ export default function HomePage() {
                     {/* Stores dropdown label and select */}
                     <Box w={{ base: "100%", md: "33%" }}>
                       <Text mb={2}>Stores</Text>
-                      <Select placeholder='Select option' onChange={handleStoreSelect} value={selectedStore}>
+                      <Select 
+                        placeholder='Select option'
+                        value={selectedStore}
+                        onChange={handleStoreSelect} 
+                        >
+
                         <option value='County Market'>County Market</option>
                         <option value='Aldi'>Aldi</option>
                         <option value='Meijer'>Meijer</option>
                       </Select>
                     </Box>
-        
-              {/* Price slider label and component */}
-              <Box w={{ base: "100%", md: "33%" }}>
-                <Text mb={2}>Price</Text>
-                <RangeSlider defaultValue={[120, 240]} min={0} max={300} step={30}>
-                  <RangeSliderTrack bg='gray.300'>
-                    <RangeSliderFilledTrack bg='green.400' />
-                  </RangeSliderTrack>
-                  <RangeSliderThumb boxSize={6} index={0} />
-                  <RangeSliderThumb boxSize={6} index={1} />
-                </RangeSlider>
+      
+                    <Box w={{ base: '100%', md: '50%' }}>
+                      <Text mb={2}>Filter By Price</Text>
+                      <RangeSlider
+                          defaultValue={[0, 100]}
+                          value={sliderValue}
+                          min={0}
+                          max={100}
+                          step={1}
+                          onChange={handleSliderChange}
+                        >
+                        <RangeSliderTrack bg="gray.200">
+                          <RangeSliderFilledTrack bg="green.400" />
+                        </RangeSliderTrack>
+                        <RangeSliderThumb boxSize={6} index={0} />
+                        <RangeSliderThumb boxSize={6} index={1} />
+                      </RangeSlider>
 
-                  <Flex justifyContent="space-between" mt={2}>
-                    <Text>$0</Text>
-                    <Text>$100</Text>
-                  </Flex>
-                </Box>
+                      <Flex justifyContent="space-between" mt={2}>
+                        <Text>${sliderValue[0]}</Text>
+                        <Text>${sliderValue[1]}</Text>
+                      </Flex>
+                    </Box>
 
                   {/* Zipcode input field */}
                   <Box w={{ base: "100%", md: "33%" }}>
@@ -131,16 +167,16 @@ export default function HomePage() {
                     <Input
                       type="tel"
                       placeholder="Zipcode"
-                      
+                      onChange={handleZipCode} 
+                      value={zipCode}
                     />
                   </Box>
                 </Flex>
                </Box>
               </Box>
             </Flex>
-            <Link to={urlstring}>
               <Button
-                // onChange={handleChange3}
+                onClick={handleSearchSubmit}
                 colorScheme={'green'}
                 bg={'green.400'}
                 rounded={'full'}
@@ -149,12 +185,9 @@ export default function HomePage() {
                   bg: 'green.500',
                 }}
                 >
-                Get me the best deal for {groceryItem} at {selectedStore}! 
-                {/* We can use {groceryItem} and {selectedStore} for sending to backend 
-                Also we can have a default zipcode at first 61820*/}
+                Get me the best deal for {groceryItem} at {selectedStore}!
               </Button>
-            </Link>
-           
+      
             <Box>
               <Icon
                 as={Arrow}
@@ -181,7 +214,7 @@ export default function HomePage() {
       </Container>
     </>
   )
-}
+};
 
 const Arrow = createIcon({
   displayName: 'Arrow',

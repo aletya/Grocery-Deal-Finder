@@ -27,81 +27,104 @@ import {
 } from '@chakra-ui/react'
 
 import { SearchIcon } from '@chakra-ui/icons'
-import { useParams, Link } from 'react-router-dom';
-import React, { useEffect, useState } from 'react';
+import { useParams, Link, useLocation } from 'react-router-dom';
+import React, { useEffect, useState, useMemo } from 'react';
 
 export default function SearchResultsPage() {
-  const { data } = useParams(); // held in the variable {data}
-  const [searchResults, setSearchResults] = useState([]);
-  let jsonreal = "hey";
+  const location = useLocation();
+  const { initialSearchData } = location.state || {};
 
-  // Handles searching again for another item
-  const [groceryItem, setGroceryItem] = React.useState('')
-  const [urlstring, setUrlstring] = React.useState('/result/');
-  const handleItemSearch = (event) => {
-    const searchedItem = event.target.value;
-    setGroceryItem(searchedItem);
-    setUrlstring('/result/' + searchedItem);
+  const [searchResults, setSearchResults] = React.useState<Deal[]>([]);
+  const [groceryItem, setGroceryItem] = React.useState('');
+  const [selectedStore, setSelectedStore] = React.useState('');
+  const [zipCode, setZipCode] = React.useState('');
+
+  const [sortOption, setSortOption] = useState('');
+  const [sliderValue, setSliderValue] = useState([0, 100]);
+
+  interface Deal {
+    title: string;
+    description: string;
+    price: string;
+  }
+  
+  interface DealResults {
+    deals: Deal[];
   }
 
-  useEffect(() => {
-    fetch('13.59.59.93:5000/county-market?zip_code=60521')
-      .then(response => {
-        if (!response.ok) {
-         throw new Error('Network response was not ok');
-        }
-        return response.json(); // Parse the response body as JSON
-      })
-      .then((json) => {
-        let results = [];
-        jsonreal = json;
-        // console.log(json);
-        for (let i = 0; i < json["deals"].length; i++) {
-          console.log(json["deals"][i]["title"]);
-          if (json["deals"][i]["title"] === data) {
-            console.log("WE GOT IT");
-            jsonreal = json["deals"][i]["title"];
+  function formatStoreName(storeName: string) {
+    return storeName.toLowerCase().replace(/\s+/g, '-');
+  }
 
-            results.push({
-              id: i,
-              name: json["deals"][i]["title"],
-              description: 'temp description', // ["deals"][i]["description"]
-              image: 'product1.jpg', // Update with actual image URL
-              price: 5,  //Number(json["deals"][i]["price"]) json["deals"][i]["price"]
-              store: 'County Market', // Update with actual store name
-            });
-            setSearchResults(results);
-            break;
-          }
-        }
-      })
-      .catch(error => {
-        console.error('There was a problem fetching the JSON:', error);
+  const handleSortOption = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setSortOption(event.target.value);
+  };
+
+  const handleSliderChange = (value: number[]) => {
+    setSliderValue(value);
+  };
+
+  const fetchData = async (store: string, zipCode: string): Promise<void> => {
+    try {
+      const storeName = formatStoreName(store);
+      const response = await fetch(`http://13.59.59.93:5000/${storeName}?zip_code=${zipCode}`, {
+        method: 'GET',
+        credentials: 'include',
       });
-    }, []);
-  // let jsonreal = "hey";
-  // fetch('http://13.59.59.93:5000/test')
-  //   .then(response => {
-  //     if (!response.ok) {
-  //       throw new Error('Network response was not ok');
-  //     }
-  //     return response.json(); // Parse the response body as JSON
-  //   })
-  //   .then((json) => {
-  //     // traverse the json to find where 
-  //     // for (let i = 0; i < json.length; i++) {
-  //     //   if (json[i]["title"] === data) {
-  //     //     // fill variables with information
-  //     //     // break? 
-  //     //   }
-  //     // }
-  //     jsonreal = json;
-  //     window.alert(jsonreal); // Update jsonreal inside the callback
-  //   })
-  //   .catch(error => {
-  //     console.error('There was a problem fetching the JSON:', error);
-  //   });
+      if (response.ok) {
+        const results = await response.json(); 
+        const filteredResults = results.deals.filter((deal: Deal) => deal.title.toLowerCase().includes(groceryItem.toLowerCase()));
+        setSearchResults(filteredResults); 
+      } else {
+        throw new Error('Network response was not ok');
+      }
+    } catch (error) {
+      console.error('Error fetching store info:', error);
+    }
+  };
 
+  const renderResults = useMemo(() => {
+    if (!sortOption) {
+      return searchResults; // Return original results if no sort option selected
+    }
+    let sorted = [...searchResults]; 
+    if (sortOption === 'priceLowToHigh') {
+      sorted.sort((a, b) => parseFloat(a.price) - parseFloat(b.price));
+    } else if (sortOption === 'priceHighToLow') {
+      sorted.sort((a, b) => parseFloat(b.price) - parseFloat(a.price));
+    } else if (sortOption === 'nameAZ') {
+      sorted.sort((a, b) => a.title.localeCompare(b.title));
+    } else if (sortOption === 'nameZA') {
+      sorted.sort((a, b) => b.title.localeCompare(a.title));
+    }
+    return sorted;
+  }, [searchResults, sortOption]);
+  
+
+  // Initial fetch based on initialSearchData
+  useEffect(() => {
+    const groceryItem = initialSearchData.groceryItem
+    const selectedStore = initialSearchData.selectedStore;
+    const zipCode = initialSearchData.zipCode;
+
+    setGroceryItem(groceryItem);
+    setSelectedStore(selectedStore);
+    setZipCode(zipCode);
+    
+    fetchData(selectedStore, zipCode);
+  }, [location.state]);
+
+  // Handles searching again for another item
+  // const [urlstring, setUrlstring] = React.useState('/result/');
+  // const handleItemSearchAgain = (event: React.ChangeEvent<HTMLInputElement>) => {
+  //   const searchedAgainItem = event.target.value;
+  //   setGroceryItem(searchedAgainItem);
+  //   setUrlstring('/result/' + searchedAgainItem);
+  // }
+
+  // const handleSearchSubmit = (event: React.MouseEvent<HTMLButtonElement>) => {
+  //   fetchData(selectedStore, zipCode);
+  // }
 
   return (
     <>
@@ -117,21 +140,29 @@ export default function SearchResultsPage() {
             fontSize={{ base: '2xl', sm: '4xl', md: '6xl' }}
             lineHeight={'110%'}
           >
-            Search Results
+            Search Results for{' '}
+            <Text as="span" color="green.400">
+              {groceryItem}
+            </Text>
+            {' '}at{' '}
+            <Text as="span" color="green.400">
+              {selectedStore}
+            </Text>:
           </Heading>
 
-          <Flex align="center" justify="center" mt={8}>
+          {/* <Flex align="center" justify="center" mt={8}>
             <InputGroup>
               <InputLeftElement pointerEvents="none">
                 <SearchIcon color="gray.300" />
               </InputLeftElement>
               <Input type="text" placeholder="Search for another item!" 
                  value={groceryItem}
-                 onChange={handleItemSearch}
+                 onChange={handleItemSearchAgain}
               />
             </InputGroup>
             <Link to ={urlstring}>
               <Button
+                onClick = {handleSearchSubmit}
                 colorScheme="green"
                 bg="green.400"
                 rounded="full"
@@ -144,28 +175,41 @@ export default function SearchResultsPage() {
                 Search
               </Button>
             </Link>
-          </Flex>
+          </Flex> */}
         
           <Box mt={8} p={5} boxShadow="md" borderWidth="1px">
+
             <Text fontSize="xl" mb={4} textAlign="center">
               Apply Filters
             </Text>
+
             <Flex direction={{ base: 'column', md: 'row' }} align="center" gap={6}>
               
               <Box w={{ base: '100%', md: '50%' }}>
                 <Text mb={2}>Sort By</Text>
-                <Select placeholder="Select option">
-                  <option value="price">Price: Low to High</option>
-                  <option value="price">Price: High to Low</option>
-                  <option value="name">Name: A-Z</option>
-                  <option value="name">Name: Z-A</option>
+                <Select placeholder="Select option"
+                  value={sortOption}
+                  onChange={handleSortOption} 
+                >
+
+                  <option value="priceLowToHigh">Price: Low to High</option>
+                  <option value="priceHighToLow">Price: High to Low</option>
+                  <option value="nameAZ">Name: A-Z</option>
+                  <option value="nameZA">Name: Z-A</option>
                 
                 </Select>
               </Box>
 
               <Box w={{ base: '100%', md: '50%' }}>
                 <Text mb={2}>Filter By Price</Text>
-                <RangeSlider defaultValue={[0, 100]} min={0} max={100} step={1}>
+                <RangeSlider
+                    defaultValue={[0, 100]}
+                    value={sliderValue}
+                    min={0}
+                    max={100}
+                    step={1}
+                    onChange={handleSliderChange}
+                  >
                   <RangeSliderTrack bg="gray.200">
                     <RangeSliderFilledTrack bg="green.400" />
                   </RangeSliderTrack>
@@ -174,37 +218,54 @@ export default function SearchResultsPage() {
                 </RangeSlider>
 
                 <Flex justifyContent="space-between" mt={2}>
-                      <Text>$0</Text>
-                      <Text>$100</Text>
+                  <Text>${sliderValue[0]}</Text>
+                  <Text>${sliderValue[1]}</Text>
                 </Flex>
-
               </Box>
+
             </Flex>
           </Box>
 
           <Grid templateColumns="repeat(auto-fit, minmax(250px, 1fr))" gap={6}>
-            {searchResults.map((result) => (
-              <GridItem key={result.id}>
+            {renderResults.map((result: Deal, index: number) => (
+              <GridItem>
                 <Box p={5} shadow="md" borderWidth="1px" borderRadius="md">
-                  <Image src={result.image} alt={result.name} borderRadius="md" />
                   <Text fontSize="xl" fontWeight="bold" mt={4}>
-                    {result.name}
+                    {result.title}
                   </Text>
                   <Text color="gray.600" fontSize="md" mt={2}>
                     {result.description}
                   </Text>
                   <Flex justify="space-between" mt={4}>
                     <Text fontSize="lg" fontWeight="bold">
-                      ${result.price.toFixed(2)}
+                      {result.price}
                     </Text>
-                    <Text fontSize="lg">{result.store}</Text>
+                    <Text fontSize="lg">{selectedStore}</Text>
                   </Flex>
                 </Box>
               </GridItem>
             ))}
           </Grid>
+
+          <Flex justify="center" mt={8}>
+            <Link to="/">
+              <Button
+                colorScheme="green"
+                bg="green.400"
+                rounded="full"
+                px={6}
+                _hover={{
+                  bg: 'green.500',
+                }}
+              >
+                Search For Another Item!
+              </Button>
+            </Link>
+          </Flex>
+
         </Stack>
       </Container>
     </>
   );
 }
+
