@@ -11,26 +11,26 @@ import pandas as pd
 
 
 def get_deals(zipcode):
-    #driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
+    driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
 
     title = []
     description = []
     price = []
     
-    title.append("Aldi Basic Deal")
-    description.append("Aldi Basic Description")
-    price.append("Aldi Basic Price")
+    # title.append("Aldi Basic Deal")
+    # description.append("Aldi Basic Description")
+    # price.append("Aldi Basic Price")
     
     deals = []
-    for i in range(0, len(title)):
-        price[i] = price[i].replace(" ","", 2)
-        price[i] = price[i].replace(" "," per ", 1)
-        deals.append({
-            'title': title[i],
-            'description': description[i],
-            'price': price[i]
-        })
-    return deals
+    # for i in range(0, len(title)):
+    #     price[i] = price[i].replace(" ","", 2)
+    #     price[i] = price[i].replace(" "," per ", 1)
+    #     deals.append({
+    #         'title': title[i],
+    #         'description': description[i],
+    #         'price': price[i]
+    #     })
+    # return deals
     #original_window = driver.current_window_handle
 
     driver.get("https://www.aldi.us/weekly-specials/our-weekly-ads/")
@@ -59,7 +59,8 @@ def get_deals(zipcode):
 
     driver.implicitly_wait(3)
 
-    map = driver.find_element(By.XPATH, '/html/body/div/div/div[5]/div/div[1]/div[2]/div/div[2]/div[2]/div/div/div[1]/div/div/map')
+    #map = driver.find_element(By.XPATH, '/html/body/div/div/div[5]/div/div[1]/div[2]/div/div[2]/div[2]/div/div/div[1]/div/div/map')
+    map = driver.find_element(By.XPATH, '/html/body/div/div/div[5]/div/div[1]/div[2]/div[1]/div/div/map')
     area_elements = map.find_elements(By.TAG_NAME, "area")
 
     item_names = []
@@ -73,6 +74,7 @@ def get_deals(zipcode):
 
     dict = {}
     count = 0
+    i = 0
     for area in area_elements:
         if (count%4 == 0):
             sentence = area.get_attribute("aria-label")
@@ -80,26 +82,35 @@ def get_deals(zipcode):
             parts = sentence.split("$")
             if len(parts) >= 2:
             # Get the words after "See Details on" but before the "$"
-                details = parts[0].split("See Details on ")[1]
-
+                #details = parts[0].split("See Details on ")[1]
+                title.append(parts[0].split("See Details on ")[1])
                 # Get the dollar value after "$"
-                price = parts[1].strip()
+                price.append(parts[1].strip())
 
-                print("Details:", details)
-                print("Price:", price)
+                # print("Details:", details)
+                # print("Price:", price)
+                # price[i] = price[i].replace(" ","", 2)
+                # price[i] = price[i].replace(" "," per ", 1)
+                deals.append({
+                    'title': title[i],
+                    'description': '',
+                    'price': price[i]
+                })
+                i += 1
                 # item_names.append(details)
                 # item_prices.append(price)
-                dict[details] = [price, "N/A"]
+                #dict[details] = [price, "N/A"]
+                
                 print("\n")
             #print(sentence)
         count += 1
         
-    sorted_dict = (sorted(dict.items(), key=lambda item: item[1]))
-    print(sorted_dict)
+    #sorted_dict = (sorted(dict.items(), key=lambda item: item[1]))
+    #print(sorted_dict)
 
     print("\n")
     
-    return sorted_dict
+    return deals
 
 print(get_deals(61801))
 
