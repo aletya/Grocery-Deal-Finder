@@ -39,6 +39,6 @@ This should start and run the website.
 * Sunny Lee - Worked on frontend creation and integration with the backend.
 * Ryan Kowalski - Worked on frontend creation and integration with the backend.
 * Alex Yang - Worked on the creation of the API and the backend server. Also worked on the County Market scraper.
-* Aditya Kshirsagar - Worked on the Aldi Selenium scraper and endpoints.
+* Aditya Kshirsagar - Worked on the Aldi Selenium scraper.
 
 
