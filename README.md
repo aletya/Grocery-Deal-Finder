@@ -20,7 +20,7 @@ Create a repository on your local machine and pull from main.
 
 Make sure the npm package is installed. If it's not installed, install it using a package manager like [Homebrew](https://brew.sh/) or [Pip](https://pypi.org/project/pip/)
 
-In this repository, run
+In *grocery-deal-finder*, run
 ```npm init```,
 
 then
