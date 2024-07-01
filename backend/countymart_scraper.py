@@ -31,10 +31,10 @@ def calculate_distance(address1, address2):
 def get_deals(user_zip_code):
     # Initializes a selenium webdriver for Chrome
     chrome_options = Options()
-    # chrome_options.add_argument("--disable-extensions")
-    # chrome_options.add_argument("--disable-gpu")
-    # chrome_options.add_argument("--no-sandbox") # linux only
-    # chrome_options.add_argument("--headless=new")
+    chrome_options.add_argument("--disable-extensions")
+    chrome_options.add_argument("--disable-gpu")
+    chrome_options.add_argument("--no-sandbox") # linux only
+    chrome_options.add_argument("--headless=new")
     driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chrome_options)
 
     # Opens the County Market website and maximizes the window
